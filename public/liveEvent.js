@@ -29,18 +29,7 @@ class NostrLiveEvent {
     }) {
       // Generate a unique identifier for this event
       const identifier = this.generateIdentifier();
-  
-      // Construct the content object
-      const content = JSON.stringify({
-        title,
-        summary,
-        streaming: {
-          url: streamUrl,
-        },
-        image,
-        starts: startTime,
-        status,
-      });
+      const content ='';  // no content shown
   
       // Construct the event object
       const event = {
