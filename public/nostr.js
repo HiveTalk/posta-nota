@@ -149,15 +149,17 @@ function clearUserInfo() {
 
 async function sendEvent(textNote, publicKey, defaultRelays, nofooter) {
     try {
-        let hiveRelays = ['wss://hivetalk.nostr1.com'];
-        let footer = '\n\n\n via #PostaNota';
+        let hiveRelays = ['wss://testnet.plebnet.dev/nostrrelay/2hive'];
+        let footer = '\n\n\n via #testing';
         // #PostaNotahashtag required to post to hive relay if not a relay member
-        let allrelays =[ ...defaultRelays]
+        //let allrelays =[ ...defaultRelays]
+        let  allrelays = [...hiveRelays];
         // Add footer
         if (nofooter === true) {
             footer = '';
         } else {
-            allrelays = [...hiveRelays, ...defaultRelays];
+            console.log('only use default relay for now')
+            allrelays = [...hiveRelays];
         }
         console.log('send Event - Relays:', allrelays);
         // Create an event
@@ -218,8 +220,42 @@ async function sendEvent(textNote, publicKey, defaultRelays, nofooter) {
     }
 }
 
+
+function setupLiveEvent() {
+    const relays = ['wss://testnet.plebnet.dev/nostrrelay/2hive']
+    const start_time = Math.floor(Date.now() / 1000) + 7200 // Start in 2 hours
+    const end_time = start_time  + 36000;
+    const eventParams = {
+        pubkey: pubkey,
+        startTime: start_time,
+        endTime: end_time,
+        title:  'My First Live Stream',
+        summary: 'Join me for an amazing live stream about Nostr!',
+        streamUrl: 'https://stream.example.com/live/mystream.m3u8',
+        image: 'https://example.com/thumbnail.jpg',
+        tags: [
+          ['t', 'nostr'],
+          ['t', 'hivetalk'],
+          ['t', 'livestream'],
+          ['price', 'free'],
+          ['status', 'planned'],
+        ]
+      }
+      console.log('eventParams', eventParams)
+      const generator = new NostrLiveEvent();
+      const { event, identifier } = generator.createLiveEvent(eventParams);
+      const naddr = generator.generateNaddr(pubkey, identifier, relays);
+      console.log('Live Event:', event);
+      console.log('Naddr:', naddr);
+      console.log('Relays:', relays);
+      sendLiveEvent(event, pubkey, relays);
+
+}
+
 function handleButtonClick() {
     const content = document.getElementById('content').value;
     const omitFooter = document.getElementById('omitFooter').checked;
-    sendEvent(content, pubkey, relays, omitFooter);
+    //sendEvent(content, pubkey, relays, omitFooter);
+    console.log('pubkey', pubkey)
+    setupLiveEvent();
 }
