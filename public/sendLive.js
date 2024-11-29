@@ -50,6 +50,8 @@ function setupLiveEvent() {
     const relays = ['wss://testnet.plebnet.dev/nostrrelay/2hive']
     const start_time = Math.floor(Date.now() / 1000) + 7200 // Start in 2 hours
     const end_time = start_time  + 36000;
+    const status = 'planned'; // planned, live, ended
+
     const eventParams = {
         pubkey: pubkey,
         startTime: start_time,
@@ -62,7 +64,7 @@ function setupLiveEvent() {
           ['t', 'nostr'],
           ['t', 'hivetalk'],
           ['t', 'livestream'],
-          ['status', 'planned'],
+          ['status', status],
         ]
       }
       console.log('eventParams', eventParams)
